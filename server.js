@@ -72,6 +72,11 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`멍멍 AI 도우미 서버가 http://localhost:${PORT} 에서 실행 중이야. 멍~`);
-});
+// 로컬 실행 시에만 서버 시작 (Vercel 서버리스 환경에서는 모듈로 export)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`멍멍 AI 도우미 서버가 http://localhost:${PORT} 에서 실행 중이야. 멍~`);
+  });
+}
+
+module.exports = app;
