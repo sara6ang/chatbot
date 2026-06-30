@@ -52,7 +52,11 @@ app.post('/api/chat', async (req, res) => {
     const reply = completion.choices[0].message.content;
     res.json({ reply });
   } catch (error) {
-    console.error('OpenAI API 오류:', error.message);
+    console.error('OpenAI API 오류 상세:', {
+      message: error.message,
+      status: error.status,
+      type: error.constructor.name,
+    });
 
     // API 키 오류
     if (error.status === 401) {
@@ -63,7 +67,7 @@ app.post('/api/chat', async (req, res) => {
       return res.status(429).json({ error: '지금 너무 많은 요청이 들어오고 있어. 잠깐 기다려줄래? 왈왈.' });
     }
 
-    res.status(500).json({ error: '멍... 뭔가 잘못됐어. 잠시 후 다시 시도해줘.' });
+    res.status(500).json({ error: `멍... 뭔가 잘못됐어. (${error.message})` });
   }
 });
 
